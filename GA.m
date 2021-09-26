@@ -1,18 +1,19 @@
-% problem: find best x within [0, 2^19-1] where 557917^2 - (x-557917)^2 reaches the greatest
+% problem: find best x within [0,2^19-1] where 557917^2 - (x-557917)^2 reaches the greatest
 % individual coded as 20-bit binary
 % fitness function is the same as objective function: 557917^2 - (x-557917)^2
 clear; close all
-M = 1000; % amount of individuals
+M = 100; % amount of individuals
 nCode = 20; % bits of code
-pc = 0.7; % probability of gene cross
-pm = 0.1; % probability of gene variation
+pc = 0.3; % probability of gene cross
+pm = 0.05; % probability of gene variation
 MAX_ITER = 100000; % max iteration
 CODE_TRANS = [2^19; 2^18; 2^17; 2^16; 2^15; 2^14; 2^13; 2^12; 2^11; 2^10; 2^9; 2^8; 2^7; 2^6; 2^5; 2^4; 2^3; 2^2; 2; 1]; % transform matrix, from binary to decimal
 fit_rec = zeros(MAX_ITER, 1);
+maxfit_rec = zeros(MAX_ITER, 1);
 
 %% initialization
 
-ppl = zeros(M, nCode); % population of 1000 individuals, with 5 codes each
+ppl = zeros(M, nCode); % population of M individuals, with 5 codes each
 
 for iter = 1:100 % 100 iterations for initialzation, picking up 10 best-fit-individuals every time
     t_indv = rand(100, nCode) > 0.5; % code of 100 indivuals
@@ -26,7 +27,15 @@ fit = 557917^2 - (ppl * CODE_TRANS - 557917).^2; % fitness value
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for ITERATION = 1:MAX_ITER
 %% reproduction
-% 轮盘赌的问题：适应度都很高时，概率差不多
+% 轮盘赌的问题：适应度都很高时，概率差不多，很难挑选出相对高适应度个体
+% 解决方法：在求概率时所有个体的适应度f_i都先减去平均适应度f_mean（负数化零），然后平方/四次方以增大适应度区分
+fit = (fit-mean(fit));
+for i = 1:M
+    if fit(i)<0
+        fit(i)=0;
+    end
+end
+fit = fit.^4;
 prob = fit / sum(fit); % probability
 sum_prob = zeros(M, 1); % accumulated probability
 sum_prob(1) = prob(1);
@@ -64,6 +73,8 @@ end
 
 fit = 557917^2 - (ppl * CODE_TRANS - 557917).^2; % fitness value
 fit_rec(ITERATION) = mean(fit);
+maxfit_rec(ITERATION) = max(fit);
 end
 
-figure, plot(fit_rec);
+figure, plot(557917^2 - fit_rec); % 平均不适应度，越小越好
+figure, plot(557917^2 - maxfit_rec); % 最小不适应度，越小越好
