@@ -1,4 +1,4 @@
-% problem: find best x & y within [0,31] where 557917^2 - (x-557917)^2 reaches the greatest
+% problem: find best x within [0,31] where 557917^2 - (x-557917)^2 reaches the greatest
 % individual coded as 20-bit binary
 % fitness function is the same as objective function: 557917^2 - (x-557917)^2
 clear; close all
