@@ -2,7 +2,7 @@
 % individual coded as 20-bit binary
 % fitness function is the same as objective function: 557917^2 - (x-557917)^2
 clear; close all
-M = 100; % amount of individuals
+M = 1000; % amount of individuals
 nCode = 20; % bits of code
 pc = 0.3; % probability of gene cross
 pm = 0.05; % probability of gene variation
