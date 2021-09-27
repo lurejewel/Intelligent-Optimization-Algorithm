@@ -15,7 +15,7 @@ maxfit_rec = zeros(MAX_ITER, 1);
 
 ppl = zeros(M, nCode); % population of M individuals, with 5 codes each
 
-for iter = 1:100 % 100 iterations for initialzation, picking up 10 best-fit-individuals every time
+for iter = 1:floor(M/10) % 100 iterations for initialzation, picking up 10 best-fit-individuals every time
     t_indv = rand(100, nCode) > 0.5; % code of 100 indivuals
     t_fit = 557917^2 - (t_indv * CODE_TRANS - 557917).^2; % fitness value of 100 individuals
     [~, i] = sort(t_fit); % sort from min to max
